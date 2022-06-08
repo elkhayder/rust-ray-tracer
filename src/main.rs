@@ -1,18 +1,14 @@
+mod helpers;
 mod models;
 
-use models::colors::Color;
+use models::canvas::Canvas;
+
+use crate::models::colors::Color;
 
 fn main() {
-    let c1 = Color {
-        r: 1.0,
-        g: 0.2,
-        b: 0.4,
-    };
-    let c2 = Color {
-        r: 0.9,
-        g: 1.0,
-        b: 0.1,
-    };
+    let mut canvas = Canvas::new(10, 2, Some(Color::new(1.0, 0.8, 0.6)));
 
-    println!("c1 * c2 = {:?}", &c1 * &c2);
+    println!("{:?}", canvas);
+
+    canvas.save();
 }

@@ -1,10 +1,25 @@
 use std::ops::{Add, Mul, Sub};
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Color {
     pub r: f64,
     pub g: f64,
     pub b: f64,
+}
+
+impl Color {
+    pub fn new(r: f64, g: f64, b: f64) -> Color {
+        Color { r, g, b }
+    }
+
+    pub fn format(&self) -> String {
+        format!(
+            "{} {} {}",
+            (self.r * 255.0) as u8,
+            (self.g * 255.0) as u8,
+            (self.b * 255.0) as u8,
+        )
+    }
 }
 
 /* OPERATIONS */
