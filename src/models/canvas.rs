@@ -1,7 +1,6 @@
 use std::{
     fs::File,
     io::{Result, Write},
-    ops::{Index, IndexMut},
 };
 
 use super::colors::Color;
@@ -29,8 +28,11 @@ impl Canvas {
         }
     }
 
-    pub fn write(&mut self, x: usize, y: usize, value: &Color) {
-        self.pixels[y][x] = *value;
+    pub fn write(&mut self, x: u32, y: u32, value: &Color) {
+        if x >= self.width || y >= self.height {
+            return;
+        }
+        self.pixels[y as usize][x as usize] = *value;
     }
 
     pub fn save(&self) -> Result<()> {
