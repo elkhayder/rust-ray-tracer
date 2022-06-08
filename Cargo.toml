@@ -1,0 +1,7 @@
+[package]
+name = "ray-tracer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+float-cmp = "0.9.0"
