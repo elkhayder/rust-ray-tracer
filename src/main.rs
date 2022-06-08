@@ -2,19 +2,33 @@ mod models;
 
 use crate::models::tuples::Tuple;
 
-fn main() {
-    let p = Tuple::point(1f64, 1f64, 1f64);
-    let a = Tuple::vector(1f64, 2f64, 3f64);
-    let b = Tuple::vector(2f64, 3f64, 4f64);
+struct Environment {
+    gravity: Tuple,
+    wind: Tuple,
+}
+struct Projectile {
+    position: Tuple,
+    velocity: Tuple,
+}
 
-    // println!("x + y = {}", &p + &v);
-    println!("p - a = {}", &p - &a);
-    println!("a magnitude = {}", p.magnitude());
-    println!("a normalized = {}", p.normalize());
-    println!("p / 2 = {}", &p / 2f64);
-    println!("p * 0.5 = {}", &p * 0.5f64);
-    println!("p / 2 == p * 0.5 is {}", &p / 2f64 == &p * 0.5f64);
-    println!("a . b = {}", &a.dot(&b));
-    println!("a * b = {}", &a * &b);
-    println!("b * a = {}", &b * &a);
+fn tick(env: &Environment, proj: &mut Projectile) {
+    println!("Position: {}, Velocity: {}", proj.position, proj.velocity);
+    proj.position = &proj.position + &proj.velocity;
+    proj.velocity = &(&proj.velocity + &env.gravity) + &env.wind;
+}
+
+fn main() {
+    let mut proj = Projectile {
+        position: Tuple::point(0.0, 1.0, 0.0),
+        velocity: Tuple::vector(1.0, 1.0, 0.0).normalize(),
+    };
+
+    let env = Environment {
+        gravity: Tuple::vector(0.0, -0.1, 0.0),
+        wind: Tuple::vector(-0.01, 0.0, 0.0),
+    };
+
+    while proj.position.y >= 0.0 {
+        tick(&env, &mut proj);
+    }
 }
