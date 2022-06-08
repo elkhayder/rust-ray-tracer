@@ -1,34 +1,18 @@
 mod models;
 
-use crate::models::tuples::Tuple;
-
-struct Environment {
-    gravity: Tuple,
-    wind: Tuple,
-}
-struct Projectile {
-    position: Tuple,
-    velocity: Tuple,
-}
-
-fn tick(env: &Environment, proj: &mut Projectile) {
-    println!("Position: {}, Velocity: {}", proj.position, proj.velocity);
-    proj.position = &proj.position + &proj.velocity;
-    proj.velocity = &(&proj.velocity + &env.gravity) + &env.wind;
-}
+use models::colors::Color;
 
 fn main() {
-    let mut proj = Projectile {
-        position: Tuple::point(0.0, 1.0, 0.0),
-        velocity: Tuple::vector(1.0, 1.0, 0.0).normalize(),
+    let c1 = Color {
+        r: 1.0,
+        g: 0.2,
+        b: 0.4,
+    };
+    let c2 = Color {
+        r: 0.9,
+        g: 1.0,
+        b: 0.1,
     };
 
-    let env = Environment {
-        gravity: Tuple::vector(0.0, -0.1, 0.0),
-        wind: Tuple::vector(-0.01, 0.0, 0.0),
-    };
-
-    while proj.position.y >= 0.0 {
-        tick(&env, &mut proj);
-    }
+    println!("c1 * c2 = {:?}", &c1 * &c2);
 }
