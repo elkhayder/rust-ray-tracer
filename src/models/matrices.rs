@@ -1,6 +1,6 @@
 use std::{
     fmt::{Debug, Display},
-    ops::{Index, IndexMut, Range},
+    ops::{Index, IndexMut, Mul, Range},
 };
 
 use float_cmp::approx_eq;
@@ -86,5 +86,37 @@ impl<'a, 'b> PartialEq<&'b Matrix> for &'a Matrix {
         }
 
         eq
+    }
+}
+
+// Multiplication
+
+impl<'a, 'b> Mul<&'b Matrix> for &'a Matrix {
+    type Output = Matrix;
+
+    fn mul(self, other: &'b Matrix) -> Self::Output {
+        assert!(
+            self.size == other.size,
+            "Tried Matrix multiplication with different sizes",
+        );
+
+        let mut data = vec![vec![0.0; self.size as usize]; self.size as usize];
+
+        let mut sum: f64;
+
+        for x in 0..self.size {
+            for y in 0..self.size {
+                sum = 0.0;
+                for i in 0..self.size {
+                    sum += self[x..i] * other[i..y];
+                }
+                data[x as usize][y as usize] = sum;
+            }
+        }
+
+        Matrix {
+            size: self.size,
+            data,
+        }
     }
 }
