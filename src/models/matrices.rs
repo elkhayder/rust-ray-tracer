@@ -7,18 +7,23 @@ use float_cmp::approx_eq;
 
 #[derive(Debug, Clone)]
 pub struct Matrix {
-    size: u32,
-    data: Vec<Vec<f64>>,
+    pub rows: u32,
+    pub columns: u32,
+    pub data: Vec<Vec<f64>>,
 }
 
 impl Matrix {
-    pub fn new(size: u32, data: Vec<Vec<f64>>) -> Matrix {
+    pub fn square(size: u32, data: Vec<Vec<f64>>) -> Matrix {
         // assert!(
         //     size as usize == data.len(),
         //     "Matrix columns aren't equal to its size"
         // );
 
-        Matrix { size, data }
+        Matrix {
+            rows: size,
+            columns: size,
+            data,
+        }
     }
 }
 
@@ -28,8 +33,9 @@ impl Display for Matrix {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "Matrix {0}x{0} \n{1}",
-            self.size,
+            "Matrix {0}x{1} \n{2}",
+            self.columns,
+            self.rows,
             self.data
                 .iter()
                 .map(|row| "|".to_string()
@@ -69,14 +75,14 @@ impl<'a, 'b> PartialEq<&'b Matrix> for &'a Matrix {
     }
 
     fn eq(&self, other: &&'b Matrix) -> bool {
-        let mut eq = self.size == other.size;
+        let mut eq = self.rows == other.rows && self.columns == other.columns;
 
         if !eq {
             return eq;
         }
 
-        for y in 0..self.size {
-            for x in 0..self.size {
+        for y in 0..self.columns {
+            for x in 0..self.rows {
                 eq &= approx_eq!(f64, self[x..y], other[x..y], ulps = 2);
 
                 if !eq {
@@ -96,27 +102,32 @@ impl<'a, 'b> Mul<&'b Matrix> for &'a Matrix {
 
     fn mul(self, other: &'b Matrix) -> Self::Output {
         assert!(
-            self.size == other.size,
-            "Tried Matrix multiplication with different sizes",
+            self.rows == other.columns,
+            "Tried {}x{} * {}x{} matrices multiplication",
+            self.columns,
+            self.rows,
+            other.columns,
+            other.rows
         );
-
-        let mut data = vec![vec![0.0; self.size as usize]; self.size as usize];
 
         let mut sum: f64;
 
-        for x in 0..self.size {
-            for y in 0..self.size {
+        let mut result = Matrix {
+            rows: self.rows,
+            columns: other.columns,
+            data: vec![vec![0.0; self.rows as usize]; other.columns as usize],
+        };
+
+        for row in 0..self.rows {
+            for column in 0..other.columns {
                 sum = 0.0;
-                for i in 0..self.size {
-                    sum += self[x..i] * other[i..y];
+                for i in 0..self.columns {
+                    sum += self[row..i] * other[i..column];
                 }
-                data[x as usize][y as usize] = sum;
+                result[row..column] = sum;
             }
         }
 
-        Matrix {
-            size: self.size,
-            data,
-        }
+        result
     }
 }

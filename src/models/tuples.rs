@@ -5,6 +5,8 @@ use std::{
 
 use float_cmp::approx_eq;
 
+use super::matrices::Matrix;
+
 pub struct Tuple {
     pub x: f64,
     pub y: f64,
@@ -164,3 +166,18 @@ impl PartialEq for Tuple {
         !self.eq(other)
     }
 }
+
+// Multiply by a matrix
+
+// impl<'a, 'b> Mul<&'b Matrix> for &'a Tuple {
+//     type Output = Tuple;
+
+//     fn mul(self, other: &'b Tuple) -> Self::Output {
+//         Tuple {
+//             x: self.y * other.z - self.z * other.y,
+//             y: self.z * other.x - self.x * other.z,
+//             z: self.x * other.y - self.y * other.x,
+//             w: self.w,
+//         }
+//     }
+// }

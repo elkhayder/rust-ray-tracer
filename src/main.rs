@@ -8,7 +8,7 @@ use crate::models::matrices::Matrix;
 fn main() {
     let started_at = Instant::now();
 
-    let matrix4_1 = Matrix::new(
+    let matrix4_1 = Matrix::square(
         4,
         Vec::from([
             Vec::from([1.0, 2.0, 3.0, 4.0]),
@@ -17,7 +17,7 @@ fn main() {
             Vec::from([5.0, 4.0, 3.0, 2.0]),
         ]),
     );
-    let matrix4_2 = Matrix::new(
+    let matrix4_2 = Matrix::square(
         4,
         Vec::from([
             Vec::from([-2.0, 1.0, 2.0, 3.0]),
