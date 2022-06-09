@@ -167,17 +167,17 @@ impl PartialEq for Tuple {
     }
 }
 
-// Multiply by a matrix
+// Matrix casting
 
-// impl<'a, 'b> Mul<&'b Matrix> for &'a Tuple {
-//     type Output = Tuple;
+impl<'a> From<&'a Matrix> for Tuple {
+    fn from(matrix: &'a Matrix) -> Self {
+        assert!(matrix.rows == 4 && matrix.columns == 1);
 
-//     fn mul(self, other: &'b Tuple) -> Self::Output {
-//         Tuple {
-//             x: self.y * other.z - self.z * other.y,
-//             y: self.z * other.x - self.x * other.z,
-//             z: self.x * other.y - self.y * other.x,
-//             w: self.w,
-//         }
-//     }
-// }
+        Tuple {
+            x: matrix[0..0],
+            y: matrix[1..0],
+            z: matrix[2..0],
+            w: matrix[3..0],
+        }
+    }
+}

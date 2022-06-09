@@ -3,7 +3,7 @@ mod models;
 
 use std::time::Instant;
 
-use crate::models::matrices::Matrix;
+use crate::models::{matrices::Matrix, tuples::Tuple};
 
 fn main() {
     let started_at = Instant::now();
@@ -31,6 +31,16 @@ fn main() {
     println!("{}", matrix4_2);
 
     println!("{}", &matrix4_1 * &matrix4_2);
+    println!(
+        "{}",
+        Tuple::from(&Matrix {
+            rows: 4,
+            columns: 1,
+            data: vec![vec![0.0]; 4]
+        })
+    );
+
+    println!("{}", Matrix::from(&Tuple::vector(1.0, 2.0, 3.0)));
 
     println!("Program took: {:?}", started_at.elapsed());
 }

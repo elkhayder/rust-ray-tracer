@@ -5,6 +5,8 @@ use std::{
 
 use float_cmp::approx_eq;
 
+use super::tuples::Tuple;
+
 #[derive(Debug, Clone)]
 pub struct Matrix {
     pub rows: u32,
@@ -129,5 +131,17 @@ impl<'a, 'b> Mul<&'b Matrix> for &'a Matrix {
         }
 
         result
+    }
+}
+
+// Tuple casting
+
+impl<'a> From<&'a Tuple> for Matrix {
+    fn from(t: &'a Tuple) -> Self {
+        Matrix {
+            rows: 4,
+            columns: 1,
+            data: vec![vec![t.x], vec![t.y], vec![t.z], vec![t.w]],
+        }
     }
 }
