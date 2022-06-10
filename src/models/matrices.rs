@@ -36,8 +36,8 @@ impl Display for Matrix {
         write!(
             f,
             "Matrix {0}x{1} \n{2}",
-            self.columns,
             self.rows,
+            self.columns,
             self.data
                 .iter()
                 .map(|row| "|".to_string()
@@ -104,24 +104,24 @@ impl<'a, 'b> Mul<&'b Matrix> for &'a Matrix {
 
     fn mul(self, other: &'b Matrix) -> Self::Output {
         assert!(
-            self.rows == other.columns,
+            self.columns == other.rows,
             "Tried {}x{} * {}x{} matrices multiplication",
-            self.columns,
             self.rows,
+            self.columns,
+            other.rows,
             other.columns,
-            other.rows
         );
-
-        let mut sum: f64;
 
         let mut result = Matrix {
             rows: self.rows,
             columns: other.columns,
-            data: vec![vec![0.0; self.rows as usize]; other.columns as usize],
+            data: vec![vec![0.0; other.columns as usize]; self.rows as usize],
         };
 
-        for row in 0..self.rows {
-            for column in 0..other.columns {
+        let mut sum: f64;
+
+        for row in 0..result.rows {
+            for column in 0..result.columns {
                 sum = 0.0;
                 for i in 0..self.columns {
                     sum += self[row..i] * other[i..column];
@@ -143,5 +143,15 @@ impl<'a> From<&'a Tuple> for Matrix {
             columns: 1,
             data: vec![vec![t.x], vec![t.y], vec![t.z], vec![t.w]],
         }
+    }
+}
+
+// Tuple multiplication
+
+impl<'a, 'b> Mul<&'b Tuple> for &'a Matrix {
+    type Output = Tuple;
+
+    fn mul(self, tuple: &'b Tuple) -> Self::Output {
+        Tuple::from(&(self * &Matrix::from(tuple)))
     }
 }

@@ -8,39 +8,35 @@ use crate::models::{matrices::Matrix, tuples::Tuple};
 fn main() {
     let started_at = Instant::now();
 
-    let matrix4_1 = Matrix::square(
-        4,
-        Vec::from([
-            Vec::from([1.0, 2.0, 3.0, 4.0]),
-            Vec::from([5.0, 6.0, 7.0, 8.0]),
-            Vec::from([9.0, 8.0, 7.0, 6.0]),
-            Vec::from([5.0, 4.0, 3.0, 2.0]),
+    let matrix4_1 = Matrix {
+        rows: 2,
+        columns: 4,
+        data: Vec::from([
+            Vec::from([1.0, 2.0, 3.0, 2.0]),
+            Vec::from([10.0, 21.0, 32.0, 43.0]),
         ]),
-    );
-    let matrix4_2 = Matrix::square(
-        4,
-        Vec::from([
-            Vec::from([-2.0, 1.0, 2.0, 3.0]),
-            Vec::from([3.0, 2.0, 1.0, -1.0]),
-            Vec::from([4.0, 3.0, 6.0, 5.0]),
-            Vec::from([1.0, 2.0, 7.0, 8.0]),
+    };
+
+    let matrix4_2 = Matrix {
+        rows: 4,
+        columns: 3,
+        data: Vec::from([
+            Vec::from([5.0, 10.0, 15.0]),
+            Vec::from([2.0, 4.0, 6.0]),
+            Vec::from([9.0, 9.0, 1.0]),
+            Vec::from([1.0, 2.0, 3.0]),
         ]),
-    );
+    };
+
+    let mul = &matrix4_1 * &matrix4_2;
 
     println!("{}", matrix4_1);
     println!("{}", matrix4_2);
+    println!("{}", mul);
 
-    println!("{}", &matrix4_1 * &matrix4_2);
-    println!(
-        "{}",
-        Tuple::from(&Matrix {
-            rows: 4,
-            columns: 1,
-            data: vec![vec![0.0]; 4]
-        })
-    );
+    // let x = &matrix4 * &tuple;
 
-    println!("{}", Matrix::from(&Tuple::vector(1.0, 2.0, 3.0)));
+    // println!("matrix4 * tuple = {}", x);
 
     println!("Program took: {:?}", started_at.elapsed());
 }
