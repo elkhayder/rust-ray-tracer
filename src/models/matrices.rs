@@ -39,6 +39,16 @@ impl Matrix {
                 .collect(),
         }
     }
+
+    pub fn transpose(&self) -> Matrix {
+        Matrix {
+            rows: self.columns,
+            columns: self.rows,
+            data: (0..self.rows)
+                .map(|row| (0..self.columns).map(|column| self[column..row]).collect())
+                .collect(),
+        }
+    }
 }
 
 // Debug
