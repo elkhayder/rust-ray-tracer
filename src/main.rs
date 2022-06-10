@@ -23,12 +23,22 @@ fn main() {
     println!("{}", matrix4);
     println!("{}", Matrix::from(&tuple));
 
-    let x = &matrix4 * &tuple;
+    let tuple = &matrix4 * &tuple;
 
-    println!("matrix4 * tuple = {}", x);
+    println!("matrix4 * tuple = {}", tuple);
 
     println!("Identity 4: {}", Matrix::identity(4));
     println!("Identity 2: {}", Matrix::identity(2));
+
+    println!(
+        "matrix4 * I == matrix4 ? {}",
+        &(&matrix4 * &Matrix::identity(4)) == &matrix4
+    );
+
+    println!(
+        "tuple * I == tuple ? {}",
+        &(&Matrix::identity(4) * &tuple) == &tuple
+    );
 
     println!("Program took: {:?}", started_at.elapsed());
 }

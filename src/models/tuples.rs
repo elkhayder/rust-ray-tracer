@@ -5,6 +5,8 @@ use std::{
 
 use float_cmp::approx_eq;
 
+use crate::helpers::constants::FLOATS_COMPARISON_ULPS;
+
 use super::matrices::Matrix;
 
 pub struct Tuple {
@@ -155,11 +157,10 @@ impl<'a, 'b> Mul<&'b Tuple> for &'a Tuple {
 /* Comparison */
 impl PartialEq for Tuple {
     fn eq(&self, other: &Self) -> bool {
-        const ULPS: i64 = 2;
-        approx_eq!(f64, self.x, other.x, ulps = ULPS)
-            && approx_eq!(f64, self.y, other.y, ulps = ULPS)
-            && approx_eq!(f64, self.z, other.z, ulps = ULPS)
-            && approx_eq!(f64, self.w, other.w, ulps = ULPS)
+        approx_eq!(f64, self.x, other.x, ulps = FLOATS_COMPARISON_ULPS)
+            && approx_eq!(f64, self.y, other.y, ulps = FLOATS_COMPARISON_ULPS)
+            && approx_eq!(f64, self.z, other.z, ulps = FLOATS_COMPARISON_ULPS)
+            && approx_eq!(f64, self.w, other.w, ulps = FLOATS_COMPARISON_ULPS)
     }
 
     fn ne(&self, other: &Self) -> bool {

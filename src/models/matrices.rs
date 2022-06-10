@@ -5,6 +5,8 @@ use std::{
 
 use float_cmp::approx_eq;
 
+use crate::helpers::constants::FLOATS_COMPARISON_ULPS;
+
 use super::tuples::Tuple;
 
 #[derive(Debug, Clone)]
@@ -95,7 +97,7 @@ impl<'a, 'b> PartialEq<&'b Matrix> for &'a Matrix {
 
         for y in 0..self.columns {
             for x in 0..self.rows {
-                eq &= approx_eq!(f64, self[x..y], other[x..y], ulps = 2);
+                eq &= approx_eq!(f64, self[x..y], other[x..y], ulps = FLOATS_COMPARISON_ULPS);
 
                 if !eq {
                     return eq;
