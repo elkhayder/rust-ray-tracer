@@ -19,12 +19,22 @@ impl Matrix {
         // assert!(
         //     size as usize == data.len(),
         //     "Matrix columns aren't equal to its size"
-        // );
+        // );z
 
         Matrix {
             rows: size,
             columns: size,
             data,
+        }
+    }
+
+    pub fn identity(size: u32) -> Matrix {
+        Matrix {
+            rows: size,
+            columns: size,
+            data: (0..size)
+                .map(|x| (0..size).map(|y| if x == y { 1.0 } else { 0.0 }).collect())
+                .collect(),
         }
     }
 }
