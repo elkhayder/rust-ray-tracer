@@ -49,6 +49,56 @@ impl Matrix {
                 .collect(),
         }
     }
+
+    // Determinant for 2x2 matrix
+    pub fn det(&self) -> f64 {
+        let mut det = 0.0;
+
+        if self.rows == 2 && self.columns == 2 {
+            det = self[0..0] * self[1..1] - self[0..1] * self[1..0];
+        } else {
+            (0..self.columns).for_each(|c| det += self[0..c] * self.cofactor(0, c as usize));
+        }
+
+        det
+    }
+
+    pub fn sub_matrix(&self, row: usize, column: usize) -> Matrix {
+        let mut matrix = Matrix {
+            rows: self.rows - 1,
+            columns: self.columns - 1,
+            data: vec![vec![0.0; (self.columns - 1) as usize]; (self.rows - 1) as usize],
+        };
+
+        // TODO: Document this code since it looks horrible
+        for (x, c_row) in self.data.iter().enumerate() {
+            if x == row {
+                continue;
+            }
+
+            for (y, c_column) in c_row.iter().enumerate() {
+                if y == column {
+                    continue;
+                }
+
+                matrix[(if x < row { x } else { x - 1 }) as u32..(if y < column {
+                    y
+                } else {
+                    y - 1
+                }) as u32] = *c_column;
+            }
+        }
+
+        matrix
+    }
+
+    pub fn minor(&self, row: usize, column: usize) -> f64 {
+        self.sub_matrix(row, column).det()
+    }
+
+    pub fn cofactor(&self, row: usize, column: usize) -> f64 {
+        (if row % 2 == column % 2 { 1.0 } else { -1.0 }) * self.minor(row, column)
+    }
 }
 
 // Debug
@@ -92,7 +142,6 @@ impl IndexMut<Range<u32>> for Matrix {
 }
 
 // Equality
-
 impl<'a, 'b> PartialEq<&'b Matrix> for &'a Matrix {
     fn ne(&self, other: &&'b Matrix) -> bool {
         !self.eq(other)
@@ -120,7 +169,6 @@ impl<'a, 'b> PartialEq<&'b Matrix> for &'a Matrix {
 }
 
 // Multiplication
-
 impl<'a, 'b> Mul<&'b Matrix> for &'a Matrix {
     type Output = Matrix;
 
@@ -157,7 +205,6 @@ impl<'a, 'b> Mul<&'b Matrix> for &'a Matrix {
 }
 
 // Tuple casting
-
 impl<'a> From<&'a Tuple> for Matrix {
     fn from(t: &'a Tuple) -> Self {
         Matrix {
@@ -169,7 +216,6 @@ impl<'a> From<&'a Tuple> for Matrix {
 }
 
 // Tuple multiplication
-
 impl<'a, 'b> Mul<&'b Tuple> for &'a Matrix {
     type Output = Tuple;
 
