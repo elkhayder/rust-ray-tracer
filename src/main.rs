@@ -1,24 +1,18 @@
 mod helpers;
 mod models;
 
-use std::time::Instant;
+use std::{f64::consts::PI, time::Instant};
 
-use crate::models::{matrices::Matrix, tuples::Tuple};
+use float_cmp::approx_eq;
+
+use crate::models::{axis::Axis, matrices::Matrices, tuples::Tuple};
 
 fn main() {
     let started_at = Instant::now();
 
-    let matrix = Matrix::square(
-        4,
-        Vec::from([
-            Vec::from([8., -5., 9., 2.]),
-            Vec::from([7., 5., 6., 1.]),
-            Vec::from([-6., 0., 9., 6.]),
-            Vec::from([-3., 0., -9., -4.]),
-        ]),
-    );
+    let point = Tuple::point(0., 1., 0.);
 
-    println!("{}", matrix.inverse());
+    println!("{}", &Matrices::rotation(Axis::Z, PI / 4.) * &point);
 
     println!("Program took: {:?}", started_at.elapsed());
 }

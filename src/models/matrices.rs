@@ -7,22 +7,14 @@ use float_cmp::approx_eq;
 
 use crate::helpers::constants::FLOATS_COMPARISON_ULPS;
 
-use super::tuples::Tuple;
+use super::{axis::Axis, tuples::Tuple};
 
-#[derive(Debug, Clone)]
-pub struct Matrix {
-    pub rows: u32,
-    pub columns: u32,
-    pub data: Vec<Vec<f64>>,
-}
+// Generators
 
-impl Matrix {
+pub struct Matrices {}
+
+impl Matrices {
     pub fn square(size: u32, data: Vec<Vec<f64>>) -> Matrix {
-        // assert!(
-        //     size as usize == data.len(),
-        //     "Matrix columns aren't equal to its size"
-        // );z
-
         Matrix {
             rows: size,
             columns: size,
@@ -40,6 +32,74 @@ impl Matrix {
         }
     }
 
+    pub fn zeros(size: u32) -> Matrix {
+        Matrix {
+            rows: size,
+            columns: size,
+            data: (0..size)
+                .map(|_| (0..size).map(|_| 0.0).collect())
+                .collect(),
+        }
+    }
+
+    pub fn translation(x: f64, y: f64, z: f64) -> Matrix {
+        let mut matrix = Matrices::identity(4);
+
+        matrix[0..3] = x;
+        matrix[1..3] = y;
+        matrix[2..3] = z;
+
+        matrix
+    }
+
+    pub fn scaling(x: f64, y: f64, z: f64) -> Matrix {
+        let mut matrix = Matrices::identity(4);
+
+        matrix[0..0] = x;
+        matrix[1..1] = y;
+        matrix[2..2] = z;
+
+        matrix
+    }
+
+    pub fn rotation(axis: Axis, r: f64) -> Matrix {
+        let mut m = Matrices::identity(4);
+        let cos = r.cos();
+        let sin = r.sin();
+
+        match axis {
+            Axis::X => {
+                m[1..1] = cos;
+                m[2..2] = cos;
+                m[2..1] = sin;
+                m[1..2] = -sin;
+            }
+            Axis::Y => {
+                m[0..0] = cos;
+                m[2..2] = cos;
+                m[0..2] = sin;
+                m[2..0] = -sin;
+            }
+            Axis::Z => {
+                m[0..0] = cos;
+                m[1..1] = cos;
+                m[0..1] = -sin;
+                m[1..0] = sin;
+            }
+        }
+
+        m
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Matrix {
+    pub rows: u32,
+    pub columns: u32,
+    pub data: Vec<Vec<f64>>,
+}
+
+impl Matrix {
     pub fn transpose(&self) -> Matrix {
         Matrix {
             rows: self.columns,
