@@ -11,15 +11,14 @@ fn main() {
     let matrix = Matrix::square(
         4,
         Vec::from([
-            Vec::from([-2., -8., 3., 5.]),
-            Vec::from([-3., 1., 7., 3.]),
-            Vec::from([1., 2., -9., 6.]),
-            Vec::from([-6., 7., 7., -9.]),
+            Vec::from([8., -5., 9., 2.]),
+            Vec::from([7., 5., 6., 1.]),
+            Vec::from([-6., 0., 9., 6.]),
+            Vec::from([-3., 0., -9., -4.]),
         ]),
     );
 
-    println!("{}", matrix);
-    println!("{}", matrix.det());
+    println!("{}", matrix.inverse());
 
     println!("Program took: {:?}", started_at.elapsed());
 }

@@ -99,6 +99,27 @@ impl Matrix {
     pub fn cofactor(&self, row: usize, column: usize) -> f64 {
         (if row % 2 == column % 2 { 1.0 } else { -1.0 }) * self.minor(row, column)
     }
+
+    pub fn is_invertible(&self) -> bool {
+        !approx_eq!(f64, self.det(), 0.0, ulps = FLOATS_COMPARISON_ULPS)
+    }
+
+    pub fn inverse(&self) -> Matrix {
+        let mut matrix = Matrix {
+            rows: self.rows,
+            columns: self.columns,
+            data: vec![vec![0.0; self.columns as usize]; self.rows as usize],
+        };
+
+        let det = self.det();
+
+        (0..self.rows).for_each(|row| {
+            (0..self.columns)
+                .for_each(|col| matrix[col..row] = self.cofactor(row as usize, col as usize) / det)
+        });
+
+        matrix
+    }
 }
 
 // Debug
