@@ -90,6 +90,21 @@ impl Matrices {
 
         m
     }
+
+    pub fn shearing(x_y: f64, x_z: f64, y_x: f64, y_z: f64, z_x: f64, z_y: f64) -> Matrix {
+        let mut m = Matrices::identity(4);
+
+        m[0..1] = x_y;
+        m[0..2] = x_z;
+
+        m[1..0] = y_x;
+        m[1..2] = y_z;
+
+        m[2..0] = z_x;
+        m[2..1] = z_y;
+
+        m
+    }
 }
 
 #[derive(Debug, Clone)]
