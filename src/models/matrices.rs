@@ -238,12 +238,12 @@ impl IndexMut<Range<u32>> for Matrix {
 }
 
 // Equality
-impl<'a, 'b> PartialEq<&'b Matrix> for &'a Matrix {
-    fn ne(&self, other: &&'b Matrix) -> bool {
+impl PartialEq<&Matrix> for &Matrix {
+    fn ne(&self, other: &&Matrix) -> bool {
         !self.eq(other)
     }
 
-    fn eq(&self, other: &&'b Matrix) -> bool {
+    fn eq(&self, other: &&Matrix) -> bool {
         let mut eq = self.rows == other.rows && self.columns == other.columns;
 
         if !eq {
@@ -265,10 +265,10 @@ impl<'a, 'b> PartialEq<&'b Matrix> for &'a Matrix {
 }
 
 // Multiplication
-impl<'a, 'b> Mul<&'b Matrix> for &'a Matrix {
+impl Mul<&Matrix> for &Matrix {
     type Output = Matrix;
 
-    fn mul(self, other: &'b Matrix) -> Self::Output {
+    fn mul(self, other: &Matrix) -> Self::Output {
         assert!(
             self.columns == other.rows,
             "Tried {}x{} * {}x{} matrices multiplication",
@@ -301,8 +301,8 @@ impl<'a, 'b> Mul<&'b Matrix> for &'a Matrix {
 }
 
 // Tuple casting
-impl<'a> From<&'a Tuple> for Matrix {
-    fn from(t: &'a Tuple) -> Self {
+impl From<&Tuple> for Matrix {
+    fn from(t: &Tuple) -> Self {
         Matrix {
             rows: 4,
             columns: 1,
@@ -312,10 +312,10 @@ impl<'a> From<&'a Tuple> for Matrix {
 }
 
 // Tuple multiplication
-impl<'a, 'b> Mul<&'b Tuple> for &'a Matrix {
+impl Mul<&Tuple> for &Matrix {
     type Output = Tuple;
 
-    fn mul(self, tuple: &'b Tuple) -> Self::Output {
+    fn mul(self, tuple: &Tuple) -> Self::Output {
         Tuple::from(&(self * &Matrix::from(tuple)))
     }
 }

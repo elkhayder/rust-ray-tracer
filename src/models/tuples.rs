@@ -34,6 +34,14 @@ impl Tuple {
     pub fn dot(&self, other: &Tuple) -> f64 {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
+
+    pub fn apply(&self, matrices: &[&Matrix]) -> Tuple {
+        Tuple::from(
+            &matrices
+                .into_iter()
+                .fold(Matrix::from(self), |prev, item| *item * &prev),
+        )
+    }
 }
 
 // Constructors
@@ -71,10 +79,10 @@ impl fmt::Display for Tuple {
 /* OPERATORS */
 
 // Addition
-impl<'a, 'b> Add<&'b Tuple> for &'a Tuple {
+impl Add<&Tuple> for &Tuple {
     type Output = Tuple;
 
-    fn add(self, other: &'b Tuple) -> Tuple {
+    fn add(self, other: &Tuple) -> Tuple {
         Tuple {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -85,10 +93,10 @@ impl<'a, 'b> Add<&'b Tuple> for &'a Tuple {
 }
 
 // Subtraction
-impl<'a, 'b> Sub<&'b Tuple> for &'a Tuple {
+impl Sub<&Tuple> for &Tuple {
     type Output = Tuple;
 
-    fn sub(self, other: &'b Tuple) -> Tuple {
+    fn sub(self, other: &Tuple) -> Tuple {
         Tuple {
             x: self.x - other.x,
             y: self.y - other.y,
@@ -99,7 +107,7 @@ impl<'a, 'b> Sub<&'b Tuple> for &'a Tuple {
 }
 
 // Negate
-impl<'a> Neg for &'a Tuple {
+impl Neg for &Tuple {
     type Output = Tuple;
 
     fn neg(self) -> Tuple {
@@ -113,7 +121,7 @@ impl<'a> Neg for &'a Tuple {
 }
 
 // Multiply by number
-impl<'a> Mul<f64> for &'a Tuple {
+impl Mul<f64> for &Tuple {
     type Output = Tuple;
 
     fn mul(self, other: f64) -> Tuple {
@@ -127,7 +135,7 @@ impl<'a> Mul<f64> for &'a Tuple {
 }
 
 // Divide by number
-impl<'a> Div<f64> for &'a Tuple {
+impl Div<f64> for &Tuple {
     type Output = Tuple;
 
     fn div(self, other: f64) -> Tuple {
@@ -141,10 +149,10 @@ impl<'a> Div<f64> for &'a Tuple {
 }
 
 // Cross product
-impl<'a, 'b> Mul<&'b Tuple> for &'a Tuple {
+impl Mul<Tuple> for &Tuple {
     type Output = Tuple;
 
-    fn mul(self, other: &'b Tuple) -> Self::Output {
+    fn mul(self, other: Tuple) -> Self::Output {
         Tuple {
             x: self.y * other.z - self.z * other.y,
             y: self.z * other.x - self.x * other.z,
@@ -170,8 +178,8 @@ impl PartialEq for Tuple {
 
 // Matrix casting
 
-impl<'a> From<&'a Matrix> for Tuple {
-    fn from(matrix: &'a Matrix) -> Self {
+impl From<&Matrix> for Tuple {
+    fn from(matrix: &Matrix) -> Self {
         assert!(matrix.rows == 4 && matrix.columns == 1);
 
         Tuple {
