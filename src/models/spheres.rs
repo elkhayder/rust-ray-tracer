@@ -1,4 +1,8 @@
-use super::{intersection::Intersection, rays::Ray, tuples::Tuple};
+use super::{
+    intersection::{Intersection, Intersections},
+    rays::Ray,
+    tuples::Tuple,
+};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Sphere {
@@ -13,8 +17,8 @@ impl Sphere {
         }
     }
 
-    pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
-        let mut r = vec![];
+    pub fn intersect(&self, ray: &Ray) -> Intersections {
+        let mut r = Intersections::new(vec![]);
 
         let sphere_to_ray = &ray.origin - &self.origin;
 
