@@ -1,5 +1,6 @@
-use super::{rays::Ray, tuples::Tuple};
+use super::{intersection::Intersection, rays::Ray, tuples::Tuple};
 
+#[derive(Debug, Clone, Copy)]
 pub struct Sphere {
     pub origin: Tuple,
     // pub radius: f64,
@@ -12,7 +13,7 @@ impl Sphere {
         }
     }
 
-    pub fn intersect(&self, ray: &Ray) -> Vec<f64> {
+    pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
         let mut r = vec![];
 
         let sphere_to_ray = &ray.origin - &self.origin;
@@ -29,8 +30,15 @@ impl Sphere {
             return r;
         }
 
-        r.push((-b - discriminant.sqrt()) / (2.0 * a));
-        r.push((-b + discriminant.sqrt()) / (2.0 * a));
+        r.push(Intersection::new(
+            self,
+            (-b - discriminant.sqrt()) / (2.0 * a),
+        ));
+
+        r.push(Intersection::new(
+            self,
+            (-b + discriminant.sqrt()) / (2.0 * a),
+        ));
 
         r
     }

@@ -9,6 +9,7 @@ use crate::helpers::constants::FLOATS_COMPARISON_ULPS;
 
 use super::matrices::Matrix;
 
+#[derive(Debug, Clone, Copy)]
 pub struct Tuple {
     pub x: f64,
     pub y: f64,

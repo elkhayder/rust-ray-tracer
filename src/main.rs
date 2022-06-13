@@ -19,9 +19,13 @@ fn main() {
 
     println!("Found {} intersection(s)", intersections.len());
 
-    intersections
-        .iter()
-        .for_each(|t| println!("Intersection at t = {}, {}", t, ray.position(*t)));
+    intersections.iter().for_each(|intersection| {
+        println!(
+            "Intersection at t = {}, {}",
+            intersection.t,
+            ray.position(intersection.t)
+        )
+    });
 
     println!("Program took: {:?}", started_at.elapsed());
 }
